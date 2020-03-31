@@ -1,0 +1,103 @@
+---
+version: '2.0'
+name: tripleo.dellemc.storage.v1
+description: TripleO manages VxFlexOS with vxflex-ansible
+
+workflows:
+  vxflex-install:
+    tags:
+      - tripleo-common-managed
+    tasks:
+      show_env:
+        publish:
+          env: <% env() %>
+      set_blacklisted_ips:
+        publish:
+          blacklisted_ips: <% env().get('blacklisted_ip_addresses', []) %>
+        on-success: set_ip_lists
+      set_ip_lists:
+        publish:
+          mdm_ips: <% let(root => $) -> env().get('service_ips', {}).get('vxflexos_mdm_ctlplane_node_ips', []).where(not ($ in $root.blacklisted_ips)).limit(2) %>
+          tb_ips: <% let(root => $) -> env().get('service_ips', {}).get('vxflexos_mdm_ctlplane_node_ips', []).where(not ($ in $root.blacklisted_ips)).last() %>
+          lia_ips: <% let(root => $) -> env().get('service_ips', {}).get('vxflexos_lia_ctlplane_node_ips', []).where(not ($ in $root.blacklisted_ips)) %>
+          sds_ips: <% let(root => $) -> env().get('service_ips', {}).get('vxflexos_sds_ctlplane_node_ips', []).where(not ($ in $root.blacklisted_ips)) %>
+          sdc_ips: <% let(root => $) -> env().get('service_ips', {}).get('vxflexos_sdc_ctlplane_node_ips', []).where(not ($ in $root.blacklisted_ips)) %>
+        on-success: merge_ip_lists
+      merge_ip_lists:
+        publish:
+          ips_list: <% ($.mdm_ips + list($.tb_ips) + $.lia_ips + $.sds_ips + $.sdc_ips).toSet() %>
+        on-success: enable_ssh_admin
+      enable_ssh_admin:
+        workflow: tripleo.access.v1.enable_ssh_admin
+        input:
+          ssh_servers: <% $.ips_list %>
+        on-success: get_private_key
+      get_private_key:
+        action: tripleo.validations.get_privkey
+        publish:
+          private_key: <% task().result %>
+        on-success: run_playbook
+      run_playbook:
+        action: tripleo.ansible-playbook
+        input:  
+          inventory:
+            mdms:
+              hosts: <% $.mdm_ips.toDict($, {}) %>
+            tbs:
+              hosts: <% $.tb_ips %>
+            lias:
+              hosts: <% $.lia_ips.toDict($, {}) %>
+            sdss:
+              hosts: <% $.sds_ips.toDict($, {}) %>
+            sdcs:
+              hosts: <% $.sdc_ips.toDict($, {}) %>
+          remote_user: tripleo-admin
+          become: true
+          become_user: root
+          verbosity: 0
+          ssh_private_key: <% $.private_key %>
+          extra_env_variables: 
+            ANSIBLE_HOST_KEY_CHECKING: 'False'
+          playbook:
+            - hosts: mdms
+              gather_facts: no
+              tasks:
+                - name: create a dummy file on MDMs
+                  copy:
+                    content: "Hello World! I'm a VxFlexOS MDM server.\n"
+                    dest: /tmp/dummyMDM
+                    force: no
+            - hosts: tbs
+              gather_facts: no
+              tasks:
+                - name: create a dummy file on Tie-Breaker
+                  copy:
+                    content: "Hello World! I'm a VxFlexOS Tie-Breaker server.\n"
+                    dest: /tmp/dummyTB
+                    force: no
+            - hosts: lias
+              gather_facts: no
+              tasks:
+                - name: create a dummy file on LIAs
+                  copy:
+                    content: "Hello World! I'm a VxflexOS LIA server.\n"
+                    dest: /tmp/dummyLIA
+                    force: no
+            - hosts: sdss
+              gather_facts: no
+              tasks:
+                - name: create a dummy file on SDSs
+                  copy:
+                    content: "Hello World! I'm a VxflexOS SDS server.\n"
+                    dest: /tmp/dummySDS
+                    force: no
+            - hosts: sdcs
+              gather_facts: no
+              tasks:
+                - name: create a dummy file on SDCs
+                  copy:
+                    content: "Hello World! I'm a VxflexOS SDC server.\n"
+                    dest: /tmp/dummySDC
+                    force: no
+        publish:
+          ansible_output: <% task().result.stderr %>

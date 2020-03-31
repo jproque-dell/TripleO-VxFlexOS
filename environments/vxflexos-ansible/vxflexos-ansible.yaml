@@ -1,0 +1,6 @@
+resource_registry:
+  OS::TripleO::Services::VxFlexMDM: ../../docker/services/vxflexos-ansible/vxflexos-mdm.yaml
+  OS::TripleO::Services::VxFlexLIA: ../../docker/services/vxflexos-ansible/vxflexos-lia.yaml
+  OS::TripleO::Services::VxFlexSDS: ../../docker/services/vxflexos-ansible/vxflexos-sds.yaml
+  OS::TripleO::Services::VxFlexSDC: ../../docker/services/vxflexos-ansible/vxflexos-sdc.yaml
+
