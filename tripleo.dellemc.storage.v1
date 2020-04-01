@@ -5,6 +5,15 @@ description: TripleO manages VxFlexOS with vxflex-ansible
 
 workflows:
   vxflex-install:
+    input:
+      - ansible_playbook_verbosity: 0
+      - ansible_env_variables: {}
+      - ansible_extra_env_variables:
+          ANSIBLE_LOG_PATH: /var/log/mistral/vxflex-install-workflow.log
+          ANSIBLE_SSH_RETRIES: 3
+          ANSIBLE_HOST_KEY_CHECKING: False
+      - vxflex_ansible_extra_vars: {}
+      - vxflex_ansible_playbook: /usr/share/vxflexos-ansible/ping.yaml
     tags:
       - tripleo-common-managed
     tasks:
@@ -39,7 +48,7 @@ workflows:
         on-success: run_playbook
       run_playbook:
         action: tripleo.ansible-playbook
-        input:  
+        input:
           inventory:
             mdms:
               hosts: <% $.mdm_ips.toDict($, {}) %>
@@ -51,53 +60,11 @@ workflows:
               hosts: <% $.sds_ips.toDict($, {}) %>
             sdcs:
               hosts: <% $.sdc_ips.toDict($, {}) %>
+          playbook: <% $.vxflex_ansible_playbook %>
           remote_user: tripleo-admin
           become: true
           become_user: root
-          verbosity: 0
+          verbosity: <% $.ansible_playbook_verbosity %>
           ssh_private_key: <% $.private_key %>
-          extra_env_variables: 
-            ANSIBLE_HOST_KEY_CHECKING: 'False'
-          playbook:
-            - hosts: mdms
-              gather_facts: no
-              tasks:
-                - name: create a dummy file on MDMs
-                  copy:
-                    content: "Hello World! I'm a VxFlexOS MDM server.\n"
-                    dest: /tmp/dummyMDM
-                    force: no
-            - hosts: tbs
-              gather_facts: no
-              tasks:
-                - name: create a dummy file on Tie-Breaker
-                  copy:
-                    content: "Hello World! I'm a VxFlexOS Tie-Breaker server.\n"
-                    dest: /tmp/dummyTB
-                    force: no
-            - hosts: lias
-              gather_facts: no
-              tasks:
-                - name: create a dummy file on LIAs
-                  copy:
-                    content: "Hello World! I'm a VxflexOS LIA server.\n"
-                    dest: /tmp/dummyLIA
-                    force: no
-            - hosts: sdss
-              gather_facts: no
-              tasks:
-                - name: create a dummy file on SDSs
-                  copy:
-                    content: "Hello World! I'm a VxflexOS SDS server.\n"
-                    dest: /tmp/dummySDS
-                    force: no
-            - hosts: sdcs
-              gather_facts: no
-              tasks:
-                - name: create a dummy file on SDCs
-                  copy:
-                    content: "Hello World! I'm a VxflexOS SDC server.\n"
-                    dest: /tmp/dummySDC
-                    force: no
-        publish:
-          ansible_output: <% task().result.stderr %>
+          extra_env_variables: <% $.ansible_extra_env_variables.mergeWith($.ansible_env_variables) %>
+
