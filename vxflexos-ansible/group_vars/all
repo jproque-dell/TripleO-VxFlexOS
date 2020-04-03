@@ -1,0 +1,22 @@
+vxflexos_license:
+vxflexos_protection_domain: domain1
+vxflexos_cluser_name: cluster1
+vxflexos_storage_pool: pool1
+
+vxflexos_cluster_mode: 3_node
+
+vxflexos_interface: vlan170
+vxflexos_password: Vxflex123!
+
+vxflexos_virtual_ip: 192.168.170.40
+
+vxflexos_mdm_package_name:
+vxflexos_sds_package_name:
+vxflexos_sdc_package_name:
+vxflexos_lia_package_name:
+
+vxflexos_sds_number: 3
+vxflexos_sds_disks: ['/dev/nvme0n1','/dev/nvme1n1','/dev/nvme2n1','/dev/nvme3n1','/dev/nvme4n1','/dev/nvme5n1','/dev/nvme6n1','/dev/nvme7n1'] 
+
+vxflexos_lia_token: 'Vxflex123!'
+

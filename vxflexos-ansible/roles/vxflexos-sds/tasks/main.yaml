@@ -1,0 +1,41 @@
+- include: ../../vxflexos-common/tasks/install_vxflexos.yaml
+
+#- name: install multiple sds 
+#  include: install_vxflexos_sds_{{ item }}.yaml
+#  when: vxflexos_sds_number > 1
+#  with_sequence: start="1" end="{{ vxflexos_sds_number }}"
+
+- name: allow traffic on 7072
+  iptables:
+    chain: INPUT
+    protocol: tcp
+    destination_port: 7072
+    jump: ACCEPT
+    action: insert
+
+- name: use local disk variable
+  when: vxflexos_sds_disks
+  set_fact: disks="{{ vxflexos_sds_disks }}"
+
+- name: login to MDM
+  command: scli --login --username admin --password "{{ vxflexos_password }}" --approve_certificate
+  run_once: true
+  delegate_to: "{{ vxflexos_mdm_mgmt_ip }}"
+
+- name: add SDS
+  command: >
+    scli --add_sds 
+    --sds_ip {{ hostvars[inventory_hostname]['ansible_'+vxflexos_interface]['ipv4']['address'] }} 
+    --storage_pool_name {{ vxflexos_storage_pool }} 
+    --sds_name "{{ inventory_hostname }}" 
+    --protection_domain_name {{ vxflexos_protection_domain }} 
+    --device_path {{ disks|join(',') }}
+    --force_device_takeover
+    --i_am_sure
+  retries: 10
+  delay: 5
+  register: add_devices
+  until: add_devices.rc == 0
+  delegate_to: "{{ vxflexos_mdm_mgmt_ip }}"
+  when: disks > 0
+

@@ -6,14 +6,14 @@ description: TripleO manages VxFlexOS with vxflex-ansible
 workflows:
   vxflex-install:
     input:
-      - ansible_playbook_verbosity: 0
+      - ansible_playbook_verbosity: 3
       - ansible_env_variables: {}
       - ansible_extra_env_variables:
           ANSIBLE_LOG_PATH: /var/log/mistral/vxflex-install-workflow.log
           ANSIBLE_SSH_RETRIES: 3
           ANSIBLE_HOST_KEY_CHECKING: False
       - vxflex_ansible_extra_vars: {}
-      - vxflex_ansible_playbook: /usr/share/vxflexos-ansible/ping.yaml
+      - vxflex_ansible_playbook: /usr/share/vxflexos-ansible/site.yaml
     tags:
       - tripleo-common-managed
     tasks:

@@ -1,0 +1,74 @@
+---
+- hosts: all
+  name: "set up facts"
+  tags: always
+  vars:
+    MDM_COUNT: "{{ groups['mdms'] | length }}"
+    TB_COUNT: "{{ groups['tbs'] | length }}"
+    SDS_COUNT: "{{ groups['sdss'] | length }}"
+    SDC_COUNT: "{{ groups['sdcs'] | length }}"
+  tasks:
+    - set_fact: vxflexos_mdm_mgmt_ip={{ hostvars[groups['mdms'][0]]['ansible_default_ipv4']['address'] }}
+    - set_fact: vxflexos_mdm_primary_ip={{ hostvars[groups['mdms'][0]]['ansible_'+vxflexos_interface]['ipv4']['address']  }}
+    - set_fact: vxflexos_mdm_primary_hostname={{ hostvars[groups['mdms'][0]]['ansible_hostname'] }}
+    - set_fact: vxflexos_mdm_secondary_ip={{ hostvars[groups['mdms'][1]]['ansible_'+vxflexos_interface]['ipv4']['address']  }}
+    - set_fact: vxflexos_mdm_secondary_hostname={{ hostvars[groups['mdms'][1]]['ansible_hostname'] }}
+        
+    - set_fact: vxflexos_tb_primary_ip={{ hostvars[groups['tbs'][0]]['ansible_'+vxflexos_interface]['ipv4']['address'] }}
+    - set_fact: vxflexos_tb_primary_hostname={{ hostvars[groups['tbs'][0]]['ansible_hostname'] }}            
+
+    - set_fact: vxflexos_mdm_ips="{{ vxflexos_mdm_primary_ip }}, {{ vxflexos_mdm_secondary_ip }}"
+
+- hosts: all
+  name: "Install VxFlex OS Common"
+  gather_facts: no
+  roles:
+   - vxflexos-common
+  tags: vxflexos-common
+                
+- hosts: mdms
+  name: "Install VxFlex OS MDM"
+  gather_facts: no
+  become: true
+  roles:
+   - vxflexos-mdm
+  tags: vxflexos-mdm
+
+- hosts: tbs
+  name: "Install VxFlex OS TB"
+  gather_facts: no
+  become: true
+  roles:
+   - vxflexos-tb
+  tags: vxflexos-tb
+
+- hosts: mdms
+  name: "Configure VxFlex OS storage"
+  gather_facts: no
+  roles:
+    - vxflexos-config
+  tags: vxflexos-config
+                
+- hosts: sdss
+  name: "Install VxFlex OS SDS"
+  gather_facts: no
+  become: true
+  roles:
+    - vxflexos-sds
+  tags: vxflexos-sds
+
+- hosts: all
+  name: "Install VxFlex OS LIA"
+  gather_facts: no
+  become: true
+  roles: 
+    - vxflexos-lia
+  tags: vxflexos-lia
+                
+- hosts: sdcs
+  name: "Install VxFlex OS SDC"
+  gather_facts: no
+  become: true
+  roles:
+    - vxflexos-sdc
+  tags: vxflexos-sdc

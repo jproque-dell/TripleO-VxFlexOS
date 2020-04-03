@@ -1,0 +1,13 @@
+- name: "include vars"
+  include_vars: "../vars/main.yaml"
+
+- include: ../../vxflexos-common/tasks/install_vxflexos.yaml
+
+- name: allow traffic on 9099
+  iptables:
+    chain: INPUT
+    protocol: tcp
+    destination_port: 9099
+    jump: ACCEPT
+    action: insert
+
