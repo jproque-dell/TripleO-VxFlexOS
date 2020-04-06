@@ -45,7 +45,15 @@ workflows:
         action: tripleo.validations.get_privkey
         publish:
           private_key: <% task().result %>
-        on-success: run_playbook
+        on-success: set_roles_vars
+      set_roles_vars:
+        publish:
+          mdm_vars: <% env().get('role_merged_configs', {}).values().select($.get('vxflexos_mdm_ansible_vars', {})).aggregate($1 + $2) %>
+        on-success: build_extra_vars
+      build_extra_vars:
+        publish:
+          extra_vars: <% $.mdm_vars %>
+        on-success: run_playbook 
       run_playbook:
         action: tripleo.ansible-playbook
         input:
@@ -67,4 +75,7 @@ workflows:
           verbosity: <% $.ansible_playbook_verbosity %>
           ssh_private_key: <% $.private_key %>
           extra_env_variables: <% $.ansible_extra_env_variables.mergeWith($.ansible_env_variables) %>
+          extra_vars: <% $.extra_vars %>
+        publish:
+          output: <% task().result %>
 

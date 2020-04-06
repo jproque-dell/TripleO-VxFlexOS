@@ -76,5 +76,10 @@
   run_once: true
   delegate_to: "{{ vxflexos_mdm_mgmt_ip }}"
   when: add_primary_mdm.rc == 0
+
+- name: rename system 
+  command: >
+    scli --rename_system 
+    --new_name {{ vxflexos_cluster_name }}
   
 

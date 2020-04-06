@@ -34,6 +34,16 @@ parameters:
     description: Mapping of service endpoint -> protocol. Typically set
                  via parameter_defaults in the resource registry.
     type: json
+  VxFlexOSClusterName:
+    default: vxflexos
+    description: The VxFlexOS cluster name
+    type: string
+    constraints:
+    - allowed_pattern: "[a-zA-Z0-9]+"
+      description: >
+        The VxFlexOS cluster name must be at leaste 1 character and contains only
+        letters and numbers.
+  
 
 resources:
 
@@ -52,3 +62,6 @@ outputs:
         step2:
           - name: vxflex_base_ansible_workflow
             workflow: {get_param: VxFlexAnsibleWorkflowName}
+      config_settings:
+        vxflexos_common_ansible_vars:
+          vxflexos_cluster_name: { get_param: VxFlexOSClusterName }
