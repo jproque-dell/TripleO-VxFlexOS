@@ -36,13 +36,17 @@ parameters:
     type: json
   VxFlexOSClusterName:
     default: vxflexos
-    description: The VxFlexOS cluster name
+    description: VxFlexOS cluster name
     type: string
     constraints:
     - allowed_pattern: "[a-zA-Z0-9]+"
       description: >
         The VxFlexOS cluster name must be at leaste 1 character and contains only
         letters and numbers.
+  VxFleOSPackageLocation:
+    default: '/home/osp_admin/vxflexos/'
+    description: location of VxFlexOS RPMs
+    type: string
   
 
 resources:
@@ -64,4 +68,6 @@ outputs:
             workflow: {get_param: VxFlexAnsibleWorkflowName}
       config_settings:
         vxflexos_common_ansible_vars:
-          vxflexos_cluster_name: { get_param: VxFlexOSClusterName }
+          cluster_name: { get_param: VxFlexOSClusterName }
+          rpms_location: {get_param: VxFleOSPackageLocation}
+          

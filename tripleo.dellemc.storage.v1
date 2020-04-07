@@ -6,7 +6,7 @@ description: TripleO manages VxFlexOS with vxflex-ansible
 workflows:
   vxflex-install:
     input:
-      - ansible_playbook_verbosity: 3
+      - ansible_playbook_verbosity: 5
       - ansible_env_variables: {}
       - ansible_extra_env_variables:
           ANSIBLE_LOG_PATH: /var/log/mistral/vxflex-install-workflow.log
