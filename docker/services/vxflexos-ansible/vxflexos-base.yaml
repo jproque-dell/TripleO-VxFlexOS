@@ -39,15 +39,53 @@ parameters:
     description: VxFlexOS cluster name
     type: string
     constraints:
-    - allowed_pattern: "[a-zA-Z0-9]+"
-      description: >
-        The VxFlexOS cluster name must be at leaste 1 character and contains only
-        letters and numbers.
-  VxFleOSPackageLocation:
-    default: '/home/osp_admin/vxflexos/'
+      - allowed_pattern: "[a-zA-Z0-9]+"
+        description: >
+          The VxFlexOS cluster name must be at leaste 1 character and contains only
+          letters and numbers.
+  VxFlexOSPackageLocation:
+    default: '../files/'
     description: location of VxFlexOS RPMs
     type: string
-  
+  VxFlexOSProtectionDomain:
+    default: 'domain1'
+    description: Protection Domain
+    type: string
+  VxFlexOSStoragePool:
+    default: 'pool1'
+    description: Storage Pool
+    type: string
+  VxFlexOSClusterMode:
+    default: '3_node'
+    description: Cluster operation model
+    type: string
+    constraints:
+      - allowed_values: [ 3_node ]
+        description: Support for 3 nodes ONLY 
+  VxFlexOSMgmtInterface:
+    default: em3  
+    description: Network interface for Mgmt purpose
+    type: string
+  VxFlexOSClusterInterface:
+    default: vlan170
+    description: Network interface for clustering 
+    type: string
+  VxFlexOSClusterVirtualIP: 
+    default: ''
+    description: Virtual IP to access the VxFlexOS cluster
+    type: string
+  VxFlexOSPassword:
+    default: 'Vxflex123!'
+    description: Password for admin user
+    type: string
+  VxFlexOSLiaToken:
+    default: 'Vxflex123!'
+    description: LIA Token
+    type: string
+  VxFlexOSDisks:
+    default: []
+    description: List of comma separated values to use as disks for SDS
+    type: comma_delimited_list
 
 resources:
 
@@ -68,6 +106,15 @@ outputs:
             workflow: {get_param: VxFlexAnsibleWorkflowName}
       config_settings:
         vxflexos_common_ansible_vars:
-          cluster_name: { get_param: VxFlexOSClusterName }
-          rpms_location: {get_param: VxFleOSPackageLocation}
+          cluster_name: {get_param: VxFlexOSClusterName}
+          cluster_mode: {get_param: VxFlexOSClusterMode}
+          rpms_location: {get_param: VxFlexOSPackageLocation}
+          protection_domain: {get_param: VxFlexOSProtectionDomain}
+          storage_pool: {get_param: VxFlexOSStoragePool}
+          mgmt_interface: {get_param: VxFlexOSMgmtInterface}
+          cluster_interface: {get_param: VxFlexOSClusterInterface}
+          cluster_vip: {get_param: VxFlexOSClusterVirtualIP}
+          password: {get_param: VxFlexOSPassword}
+          lia_token: {get_param: VxFlexOSLiaToken}
+          sds_disks: {get_param: VxFlexOSDisks} 
           

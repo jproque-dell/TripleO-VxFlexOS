@@ -33,8 +33,8 @@
    scli --create_mdm_cluster
    --master_mdm_ip {{ vxflexos_mdm_primary_ip }}
    --master_mdm_name {{ vxflexos_mdm_primary_hostname }}
-   --master_mdm_virtual_ip_interface {{ vxflexos_interface }}
-   --cluster_virtual_ip {{ vxflexos_virtual_ip }}
+   --master_mdm_virtual_ip_interface {{ cluster_interface }}
+   --cluster_virtual_ip {{ cluster_vip }}
    --accept_license 
    --approve_certificate
   run_once: true
@@ -54,13 +54,13 @@
   register: initial_login
   
 - name: change password
-  command: scli --set_password --old_password admin --new_password "{{ vxflexos_password }}"
+  command: scli --set_password --old_password admin --new_password "{{ password }}"
   run_once: true
   delegate_to: "{{ vxflexos_mdm_mgmt_ip }}"
   when: initial_login.rc == 0
   
 - name: login with new password
-  command: scli --login --username admin --password "{{ vxflexos_password }}" --approve_certificate
+  command: scli --login --username admin --password "{{ password }}" --approve_certificate
   run_once: true
   delegate_to: "{{ vxflexos_mdm_mgmt_ip }}"
 
@@ -70,7 +70,7 @@
     --new_mdm_ip {{ vxflexos_mdm_secondary_ip }}
     --mdm_role manager
     --new_mdm_management_ip {{ vxflexos_mdm_secondary_ip }}
-    --new_mdm_virtual_ip_interface {{ vxflexos_interface }}
+    --new_mdm_virtual_ip_interface {{ cluster_interface }}
     --force_clean --i_am_sure
     --approve_certificate
   run_once: true
@@ -80,6 +80,8 @@
 - name: rename system 
   command: >
     scli --rename_system 
-    --new_name {{ vxflexos_cluster_name }}
+    --new_name {{ cluster_name }}
+  run_once: true
+  delegate_to: "{{ vxflexos_mdm_mgmt_ip }}"
   
 

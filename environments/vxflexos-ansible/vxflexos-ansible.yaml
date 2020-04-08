@@ -4,20 +4,20 @@ resource_registry:
   OS::TripleO::Services::VxFlexSDS: ../../docker/services/vxflexos-ansible/vxflexos-sds.yaml
   OS::TripleO::Services::VxFlexSDC: ../../docker/services/vxflexos-ansible/vxflexos-sdc.yaml
 
-parameters:
-#  VxFlexOSProtectionDomain: domain1
+parameter_defaults:
+  VxFleOSPackageLocation: '../files/'
   VxFlexOSClusterName: vxflexos
-#  VxFlexOSStoragePool: pool1
+  VxFlexOSProtectionDomain: domain1
+  VxFlexOSStoragePool: pool1
 
   # Only 3-node cluster mode is supported at this time
-#  VxFlexOSClusterMode: 3_node
+  VxFlexOSClusterMode: 3_node
+ 
+  VxFlexOSMgmtInterface: em3
+  VxFlexOSClusterInterface: vlan170
+  VxFlexOSClusterVirtualIP: 192.168.170.40
+  
+  VxFlexOSDisks: ['/dev/nvme0n1','/dev/nvme1n1','/dev/nvme2n1','/dev/nvme3n1','/dev/nvme4n1','/dev/nvme5n1','/dev/nvme6n1','/dev/nvme7n1']
 
-#  VxFlexOSMgmtInterface: em3
-#  VxFlexOSClusterInterface: vlan170
-#  VxFlexOSClusterVirtualIP: 192.168.170.40
-
-#  VxFlexOSDisks: ['/dev/nvme0n1','/dev/nvme1n1','/dev/nvme2n1','/dev/nvme3n1','/dev/nvme4n1','/dev/nvme5n1','/dev/nvme6n1','/dev/nvme7n1']
-
-#  VxFlexOSPassword: 'Vxflex123!'
-#  VxFlexOSLiaToken: 'Vxflex123!'
-
+  VxFlexOSPassword: 'Vxflex123!'
+  VxFlexOSLiaToken: 'Vxflex123!'

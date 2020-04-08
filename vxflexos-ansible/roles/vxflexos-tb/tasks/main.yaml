@@ -17,7 +17,7 @@
     action: insert
 
 - name: login with password
-  command: scli --login --username admin --password "{{ vxflexos_password }}"
+  command: scli --login --username admin --password "{{ password }}"
   run_once: true
   delegate_to: "{{ vxflexos_mdm_mgmt_ip }}"
 
@@ -28,6 +28,6 @@
   register: add_primary_tb
 
 - name: switch to cluster three node
-  command: scli --switch_cluster_mode --cluster_mode "{{ vxflexos_cluster_mode }}" --add_slave_mdm_ip "{{ vxflexos_mdm_secondary_ip }}" --add_tb_ip "{{ vxflexos_tb_primary_ip }}" 
+  command: scli --switch_cluster_mode --cluster_mode "{{ cluster_mode }}" --add_slave_mdm_ip "{{ vxflexos_mdm_secondary_ip }}" --add_tb_ip "{{ vxflexos_tb_primary_ip }}" 
   run_once: true
   delegate_to: "{{ vxflexos_mdm_mgmt_ip }}"

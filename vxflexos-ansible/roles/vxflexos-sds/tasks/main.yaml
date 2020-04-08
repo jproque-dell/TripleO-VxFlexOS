@@ -14,21 +14,21 @@
     action: insert
 
 - name: use local disk variable
-  when: vxflexos_sds_disks
-  set_fact: disks="{{ vxflexos_sds_disks }}"
+  when: sds_disks
+  set_fact: disks="{{ sds_disks }}"
 
 - name: login to MDM
-  command: scli --login --username admin --password "{{ vxflexos_password }}" --approve_certificate
+  command: scli --login --username admin --password "{{ password }}" --approve_certificate
   run_once: true
   delegate_to: "{{ vxflexos_mdm_mgmt_ip }}"
 
 - name: add SDS
   command: >
     scli --add_sds 
-    --sds_ip {{ hostvars[inventory_hostname]['ansible_'+vxflexos_interface]['ipv4']['address'] }} 
-    --storage_pool_name {{ vxflexos_storage_pool }} 
+    --sds_ip {{ hostvars[inventory_hostname]['ansible_'+cluster_interface]['ipv4']['address'] }} 
+    --storage_pool_name {{ storage_pool }} 
     --sds_name "{{ inventory_hostname }}" 
-    --protection_domain_name {{ vxflexos_protection_domain }} 
+    --protection_domain_name {{ protection_domain }} 
     --device_path {{ disks|join(',') }}
     --force_device_takeover
     --i_am_sure

@@ -3,4 +3,4 @@ vxflexos_role_environment:
   - key: "MDM_IP"
     value: "{{ vxflexos_mdm_ips }}"
   - key: "TOKEN"
-    value: "{{ vxflexos_lia_token }}"
+    value: "{{ lia_token }}"
