@@ -22,7 +22,7 @@
   delegate_to: "{{ vxflexos_mdm_mgmt_ip }}"
 
 - name: add tie breaker
-  command: scli --add_standby_mdm --new_mdm_ip "{{ vxflexos_tb_primary_ip }}" --mdm_role tb
+  command: scli --add_standby_mdm --new_mdm_ip "{{ vxflexos_tb_primary_ip }}" --new_mdm_name "{{ vxflexos_tb_primary_hostname }}" --mdm_role tb
   run_once: true
   delegate_to: "{{ vxflexos_mdm_mgmt_ip }}"
   register: add_primary_tb

@@ -68,6 +68,7 @@
   command: >
     scli --add_standby_mdm
     --new_mdm_ip {{ vxflexos_mdm_secondary_ip }}
+    --new_mdm_name {{ vxflexos_mdm_secondary_hostname }}
     --mdm_role manager
     --new_mdm_management_ip {{ vxflexos_mdm_secondary_ip }}
     --new_mdm_virtual_ip_interface {{ cluster_interface }}

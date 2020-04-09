@@ -20,7 +20,7 @@
     --storage_pool_name {{ storage_pool }} 
     --sds_name "{{ hostvars[inventory_hostname]['ansible_hostname'] }}" 
     --protection_domain_name {{ protection_domain }} 
-    --device_path {{ disks|join(',') }}
+    --device_path {{ sds_disks|join(',') }}
     --force_device_takeover
     --i_am_sure
   retries: 10
@@ -28,5 +28,5 @@
   register: add_devices
   until: add_devices.rc == 0
   delegate_to: "{{ vxflexos_mdm_mgmt_ip }}"
-  when: disks > 0
+  when: sds_disks > 0
 

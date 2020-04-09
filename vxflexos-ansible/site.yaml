@@ -1,6 +1,7 @@
 ---
 - hosts: all
   name: "set up facts"
+  gather_facts: yes
   tags: always
   tasks:
     - set_fact: vxflexos_mdm_mgmt_ip={{ hostvars[groups['mdms'][0]]['ansible_default_ipv4']['address'] }}
@@ -13,6 +14,10 @@
     - set_fact: vxflexos_tb_primary_hostname={{ hostvars[groups['tbs'][0]]['ansible_hostname'] }}            
 
     - set_fact: vxflexos_mdm_ips="{{ vxflexos_mdm_primary_ip }}, {{ vxflexos_mdm_secondary_ip }}"
+    
+    - debug:
+      var: hostvars[groups['mdms']]
+      verbosity: 4
 
 - hosts: all
   name: "Install VxFlex OS Common"
