@@ -1,31 +1,28 @@
 ---
 - hosts: all
-  name: "set up facts"
-  gather_facts: yes
-  tags: always
-  tasks:
-    - set_fact: vxflexos_mdm_mgmt_ip={{ hostvars[groups['mdms'][0]]['ansible_default_ipv4']['address'] }}
-    - set_fact: vxflexos_mdm_primary_ip={{ hostvars[groups['mdms'][0]]['ansible_'+cluster_interface]['ipv4']['address']  }}
-    - set_fact: vxflexos_mdm_primary_hostname={{ hostvars[groups['mdms'][0]]['ansible_hostname'] }}
-    - set_fact: vxflexos_mdm_secondary_ip={{ hostvars[groups['mdms'][1]]['ansible_'+cluster_interface]['ipv4']['address']  }}
-    - set_fact: vxflexos_mdm_secondary_hostname={{ hostvars[groups['mdms'][1]]['ansible_hostname'] }}
-        
-    - set_fact: vxflexos_tb_primary_ip={{ hostvars[groups['tbs'][0]]['ansible_'+cluster_interface]['ipv4']['address'] }}
-    - set_fact: vxflexos_tb_primary_hostname={{ hostvars[groups['tbs'][0]]['ansible_hostname'] }}            
-
-    - set_fact: vxflexos_mdm_ips="{{ vxflexos_mdm_primary_ip }}, {{ vxflexos_mdm_secondary_ip }}"
-    
-    - debug:
-      var: hostvars[groups['mdms']]
-      verbosity: 4
+  name: "Set facts"
+  gather_facts: true
+  roles: 
+    - vxflexos-facts
+  tags: vxflexos-facts
 
 - hosts: all
-  name: "Install VxFlex OS Common"
-  gather_facts: no
-  roles:
-   - vxflexos-common
-  tags: vxflexos-common
-                
+  name: "dump facts"
+  tasks:
+    - template:
+        src: dump_variables
+        dest: /tmp/ansible_variables
+    - fetch:
+        src: /tmp/ansible_variables
+        dest: /tmp/ansible_variables/"{{ inventory_hostname }}_ansible_variables"
+
+- hosts: all
+  name: "display inventory"
+  tasks:
+    - debug:
+        msg: "{{ item }}"
+      loop: "{{ groups['all'] }}"
+    
 - hosts: mdms
   name: "Install VxFlex OS MDM"
   gather_facts: no

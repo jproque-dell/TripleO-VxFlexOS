@@ -1,11 +1,20 @@
 - name: include vars
   include_vars: "../vars/main.yaml"
 
-#- name: install pre-requisite package
-#  package: name={{ item }} state=latest
-#  with_items: "{{ vxflexos_mdm_packages }}"
-
 - include: ../../vxflexos-common/tasks/install_vxflexos.yaml
+
+- name: "display inventory"
+  debug:
+    msg: "{{ item }}"
+  loop: "{{ groups['mdms'] }}"
+
+- name: display MDM primary information
+  debug: 
+    msg: "Primary MDM is {{ vxflexos_mdm_primary_hostname }} with IP {{ vxflexos_mdm_primary_ip }}"
+
+- name: display MDM secondary information
+  debug:
+    msg: "Secondary MDM is {{ vxflexos_mdm_secondary_hostname }} with IP {{ vxflexos_mdm_secondary_ip }}"
 
 - name: wait for mdm to be active
   wait_for: port=9011 state=started

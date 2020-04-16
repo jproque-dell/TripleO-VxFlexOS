@@ -1,0 +1,32 @@
+---
+- name: Set primary MDM Management IP
+  set_fact: 
+    vxflexos_mdm_mgmt_ip: "{{ hostvars[groups['mdms'][0]]['ansible_default_ipv4']['address'] }}"
+
+- name: Set MDM primary cluster IP
+  set_fact:
+    vxflexos_mdm_primary_ip: "{{ hostvars[groups['mdms'][0]]['ansible_'+cluster_interface]['ipv4']['address']  }}"
+
+- name: Set MDM primary hostname
+  set_fact:
+    vxflexos_mdm_primary_hostname: "{{ hostvars[groups['mdms'][0]]['ansible_hostname'] }}"
+
+- name: Set MDM secondary cluster IP
+  set_fact:
+    vxflexos_mdm_secondary_ip: "{{ hostvars[groups['mdms'][1]]['ansible_'+cluster_interface]['ipv4']['address']  }}"
+
+- name: Set MDM secondary cluster IP
+  set_fact:
+    vxflexos_mdm_secondary_hostname: "{{ hostvars[groups['mdms'][1]]['ansible_hostname'] }}"
+
+- name: Set Tie-Breaker cluster IP
+  set_fact:
+    vxflexos_tb_primary_ip: "{{ hostvars[groups['mdms'][2]]['ansible_'+cluster_interface]['ipv4']['address'] }}"
+
+- name: Set Tie-Breaker hostname
+  set_fact:
+    vxflexos_tb_primary_hostname: "{{ hostvars[groups['mdms'][2]]['ansible_hostname'] }}"
+
+- name: Merge MDM cluster IPs
+  set_fact:
+    vxflexos_mdm_ips: "{{ vxflexos_mdm_primary_ip }}, {{ vxflexos_mdm_secondary_ip }}"
