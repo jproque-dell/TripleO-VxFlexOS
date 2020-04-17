@@ -27,13 +27,14 @@ workflows:
       set_ip_lists:
         publish:
           mdm_ips: <% let(root => $) -> env().get('service_ips', {}).get('vxflexos_mdm_ctlplane_node_ips', []).where(not ($ in $root.blacklisted_ips)) %>
+          tb_ips: <% let(root => $) -> env().get('service_ips', {}).get('vxflexos_mdm_ctlplane_node_ips', []).where(not ($ in $root.blacklisted_ips)).last() %>
           lia_ips: <% let(root => $) -> env().get('service_ips', {}).get('vxflexos_lia_ctlplane_node_ips', []).where(not ($ in $root.blacklisted_ips)) %>
           sds_ips: <% let(root => $) -> env().get('service_ips', {}).get('vxflexos_sds_ctlplane_node_ips', []).where(not ($ in $root.blacklisted_ips)) %>
           sdc_ips: <% let(root => $) -> env().get('service_ips', {}).get('vxflexos_sdc_ctlplane_node_ips', []).where(not ($ in $root.blacklisted_ips)) %>
         on-success: merge_ip_lists
       merge_ip_lists:
         publish:
-          ips_list: <% ($.mdm_ips + $.lia_ips + $.sds_ips + $.sdc_ips).toSet() %>
+          ips_list: <% ($.mdm_ips + list($.tb_ips) + $.lia_ips + $.sds_ips + $.sdc_ips).toSet() %>
         on-success: enable_ssh_admin
       enable_ssh_admin:
         workflow: tripleo.access.v1.enable_ssh_admin
@@ -59,6 +60,8 @@ workflows:
           inventory:
             mdms:
               hosts: <% $.mdm_ips.toDict($, {}) %>
+            tbs:
+              hosts: <% $.tb_ips %>
             lias:
               hosts: <% $.lia_ips.toDict($, {}) %>
             sdss:
