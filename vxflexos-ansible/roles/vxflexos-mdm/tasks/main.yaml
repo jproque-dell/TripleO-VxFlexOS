@@ -3,11 +3,6 @@
 
 - include: ../../vxflexos-common/tasks/install_vxflexos.yaml
 
-- name: "display inventory"
-  debug:
-    msg: "{{ item }}"
-  loop: "{{ groups['mdms'] }}"
-
 - name: display MDM primary information
   debug: 
     msg: "Primary MDM is {{ vxflexos_mdm_primary_hostname }} with IP {{ vxflexos_mdm_primary_ip }}"

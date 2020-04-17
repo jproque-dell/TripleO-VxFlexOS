@@ -26,7 +26,7 @@ workflows:
         on-success: set_ip_lists
       set_ip_lists:
         publish:
-          mdm_ips: <% let(root => $) -> env().get('service_ips', {}).get('vxflexos_mdm_ctlplane_node_ips', []).where(not ($ in $root.blacklisted_ips)) %>
+          mdm_ips: <% let(root => $) -> env().get('service_ips', {}).get('vxflexos_mdm_ctlplane_node_ips', []).where(not ($ in $root.blacklisted_ips)).limit(2) %>
           tb_ips: <% let(root => $) -> env().get('service_ips', {}).get('vxflexos_mdm_ctlplane_node_ips', []).where(not ($ in $root.blacklisted_ips)).last() %>
           lia_ips: <% let(root => $) -> env().get('service_ips', {}).get('vxflexos_lia_ctlplane_node_ips', []).where(not ($ in $root.blacklisted_ips)) %>
           sds_ips: <% let(root => $) -> env().get('service_ips', {}).get('vxflexos_sds_ctlplane_node_ips', []).where(not ($ in $root.blacklisted_ips)) %>

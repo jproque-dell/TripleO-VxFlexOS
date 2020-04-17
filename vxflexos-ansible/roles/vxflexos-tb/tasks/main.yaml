@@ -1,3 +1,6 @@
+- name: include vars
+  include_vars: "../vars/main.yaml"
+
 - include: ../../vxflexos-common/tasks/install_vxflexos.yaml
 
 - name: display Tie-Breaker information
