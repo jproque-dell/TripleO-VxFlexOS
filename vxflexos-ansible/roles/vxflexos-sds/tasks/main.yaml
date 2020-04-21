@@ -1,22 +1,5 @@
 - include: ../../vxflexos-common/tasks/install_vxflexos.yaml
 
-- name: "display inventory"
-  debug:
-    msg: "{{ item }}"
-  loop: "{{ groups['sdss'] }}"
-
-- name: Display SDS name
-  debug:
-   var: hostvars[inventory_hostname]['ansible_hostname']
-
-- name: Display SDS IP
-  debug:
-    var: hostvars[inventory_hostname]['ansible_'+cluster_interface]['ipv4']['address']
-
-- name: show current host information
-  debug:
-    msg: "host is {{ inventory_hostname }}"
-
 - name: allow traffic on 7072
   iptables:
     chain: INPUT

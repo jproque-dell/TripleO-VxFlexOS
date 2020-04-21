@@ -1,4 +1,5 @@
 ---
+# MDM IP/Hostnames assignement
 - name: Set primary MDM Management IP
   set_fact: 
     vxflexos_mdm_mgmt_ip: "{{ hostvars[groups['mdms'][0]]['ansible_default_ipv4']['address'] }}"
@@ -21,12 +22,89 @@
 
 - name: Set Tie-Breaker cluster IP
   set_fact:
-    vxflexos_tb_primary_ip: "{{ hostvars[groups['mdms'][2]]['ansible_'+cluster_interface]['ipv4']['address'] }}"
+    vxflexos_tb_primary_ip: "{{ hostvars[groups['tbs'][0]]['ansible_'+cluster_interface]['ipv4']['address'] }}"
 
 - name: Set Tie-Breaker hostname
   set_fact:
-    vxflexos_tb_primary_hostname: "{{ hostvars[groups['mdms'][2]]['ansible_hostname'] }}"
+    vxflexos_tb_primary_hostname: "{{ hostvars[groups['tbs'][0]]['ansible_hostname'] }}"
 
 - name: Merge MDM cluster IPs
   set_fact:
     vxflexos_mdm_ips: "{{ vxflexos_mdm_primary_ip }}, {{ vxflexos_mdm_secondary_ip }}"
+
+# SDS IP/Hostnames assignment
+- name: Set first SDS IP
+  set_fact:
+    vxflexos_sds1_ip: "{{ hostvars[groups['sdss'][0]]['ansible_'+cluster_interface]['ipv4']['address']  }}"
+
+- name: Set first SDS  hostname
+  set_fact: 
+    vxflexos_sds1_hostname: "{{ hostvars[groups['sdss'][0]]['ansible_hostname'] }}"
+
+- name: Set second SDS  IP
+  set_fact:
+    vxflexos_sds2_ip: "{{ hostvars[groups['sdss'][1]]['ansible_'+cluster_interface]['ipv4']['address']  }}"
+
+- name: Set second SDS hostname
+  set_fact: 
+    vxflexos_sds2_hostname: "{{ hostvars[groups['sdss'][1]]['ansible_hostname'] }}"
+
+- name: Set third SDS IP
+  set_fact:
+    vxflexos_sds3_ip: "{{ hostvars[groups['sdss'][2]]['ansible_'+cluster_interface]['ipv4']['address']  }}"
+
+- name: Set third SDS hostname
+  set_fact: 
+    vxflexos_sds3_hostname: "{{ hostvars[groups['sdss'][2]]['ansible_hostname'] }}"
+
+# SDC IP/Hostnames assignment
+- name: Set first SDC IP
+  set_fact:
+    vxflexos_sdc1_ip: "{{ hostvars[groups['sdcs'][0]]['ansible_'+cluster_interface]['ipv4']['address']  }}"
+
+- name: Set first SDC hostname
+  set_fact:
+    vxflexos_sdc1_hostname: "{{ hostvars[groups['sdcs'][0]]['ansible_hostname'] }}"
+
+- name: Set second SDC IP
+  set_fact:
+    vxflexos_sdc2_ip: "{{ hostvars[groups['sdcs'][1]]['ansible_'+cluster_interface]['ipv4']['address']  }}"
+
+- name: Set second SDC hostname
+  set_fact:
+    vxflexos_sdc2_hostname: "{{ hostvars[groups['sdcs'][1]]['ansible_hostname'] }}"
+
+- name: Set third SDC IP
+  set_fact:
+    vxflexos_sdc3_ip: "{{ hostvars[groups['sdcs'][2]]['ansible_'+cluster_interface]['ipv4']['address']  }}"
+
+- name: Set third SDC hostname
+  set_fact:
+    vxflexos_sdc3_hostname: "{{ hostvars[groups['sdcs'][2]]['ansible_hostname'] }}"
+
+- name: Set fourth SDC IP
+  set_fact:
+    vxflexos_sdc4_ip: "{{ hostvars[groups['sdcs'][3]]['ansible_'+cluster_interface]['ipv4']['address']  }}"
+
+- name: Set fourth SDC hostname
+  set_fact:
+    vxflexos_sdc4_hostname: "{{ hostvars[groups['sdcs'][3]]['ansible_hostname'] }}"
+
+- name: Set fifth SDC IP
+  set_fact:
+    vxflexos_sdc5_ip: "{{ hostvars[groups['sdcs'][4]]['ansible_'+cluster_interface]['ipv4']['address']  }}"
+
+- name: Set fifth SDC hostname
+  set_fact:
+    vxflexos_sdc5_hostname: "{{ hostvars[groups['sdcs'][4]]['ansible_hostname'] }}"
+
+- name: Set sixth SDC IP
+  set_fact:
+    vxflexos_sdc6_ip: "{{ hostvars[groups['sdcs'][5]]['ansible_'+cluster_interface]['ipv4']['address']  }}"
+
+- name: Set sixth SDC hostname
+  set_fact:
+    vxflexos_sdc6_hostname: "{{ hostvars[groups['sdcs'][5]]['ansible_hostname'] }}"
+
+
+

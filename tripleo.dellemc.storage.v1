@@ -57,6 +57,7 @@ workflows:
       run_playbook:
         action: tripleo.ansible-playbook
         input:
+          trash_output: true
           inventory:
             mdms:
               hosts: <% $.mdm_ips.toDict($, {}) %>
