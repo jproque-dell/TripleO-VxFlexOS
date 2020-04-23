@@ -10,8 +10,8 @@ parameter_defaults:
   VxFlexOSProtectionDomain: domain1
   VxFlexOSStoragePool: pool1
 
-  # Only 3-node cluster mode is supported at this time
-  VxFlexOSClusterMode: 3_node
+  # Only 3-node cluster config is supported at this time
+  VxFlexOSClusterConfig: 3_node
  
   VxFlexOSMgmtInterface: em3
   VxFlexOSClusterInterface: vlan170

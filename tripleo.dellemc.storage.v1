@@ -1,19 +1,19 @@
 ---
 version: '2.0'
 name: tripleo.dellemc.storage.v1
-description: TripleO manages VxFlexOS with vxflex-ansible
+description: TripleO manages VxFlexOS with vxflexos-ansible
 
 workflows:
-  vxflex-install:
+  vxflexos-install:
     input:
-      - ansible_playbook_verbosity: 5
+      - ansible_playbook_verbosity: 3
       - ansible_env_variables: {}
       - ansible_extra_env_variables:
-          ANSIBLE_LOG_PATH: /var/log/mistral/vxflex-install-workflow.log
+          ANSIBLE_LOG_PATH: /var/log/mistral/vxflexos-install-workflow.log
           ANSIBLE_SSH_RETRIES: 3
           ANSIBLE_HOST_KEY_CHECKING: False
-      - vxflex_ansible_extra_vars: {}
-      - vxflex_ansible_playbook: /usr/share/vxflexos-ansible/site.yaml
+      - vxflexos_ansible_extra_vars: {}
+      - vxflexos_ansible_playbook: /usr/share/vxflexos-ansible/site.yaml
     tags:
       - tripleo-common-managed
     tasks:
@@ -49,12 +49,15 @@ workflows:
       set_roles_vars:
         publish:
           mdm_vars: <% env().get('role_merged_configs', {}).values().select($.get('vxflexos_mdm_ansible_vars', {})).aggregate($1 + $2) %>
+          lia_vars: <% env().get('role_merged_configs', {}).values().select($.get('vxflexos_lia_ansible_vars', {})).aggregate($1 + $2) %>
+          sds_vars: <% env().get('role_merged_configs', {}).values().select($.get('vxflexos_sds_ansible_vars', {})).aggregate($1 + $2) %>
+          sdc_vars: <% env().get('role_merged_configs', {}).values().select($.get('vxflexos_sdc_ansible_vars', {})).aggregate($1 + $2) %>
         on-success: build_extra_vars
       build_extra_vars:
         publish:
-          extra_vars: <% $.mdm_vars %>
-        on-success: run_playbook 
-      run_playbook:
+          extra_vars: <% $.mdm_vars + $.lia_vars + $.sds_vars + $.sdc_vars %>
+        on-success: vxflexos_install
+      vxflexos_install:
         action: tripleo.ansible-playbook
         input:
           trash_output: true
@@ -69,7 +72,7 @@ workflows:
               hosts: <% $.sds_ips.toDict($, {}) %>
             sdcs:
               hosts: <% $.sdc_ips.toDict($, {}) %>
-          playbook: <% $.vxflex_ansible_playbook %>
+          playbook: <% $.vxflexos_ansible_playbook %>
           remote_user: tripleo-admin
           become: true
           become_user: root

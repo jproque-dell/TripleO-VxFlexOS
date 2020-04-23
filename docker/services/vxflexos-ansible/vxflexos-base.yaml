@@ -28,7 +28,7 @@ parameters:
   VxFlexAnsibleWorkflowName:
     type: string
     description: Name of the Mistral workflow to execute
-    default: tripleo.dellemc.storage.v1.vxflex-install
+    default: tripleo.dellemc.storage.v1.vxflexos-install
   EndpointMap:
     default: {}
     description: Mapping of service endpoint -> protocol. Typically set
@@ -55,9 +55,9 @@ parameters:
     default: 'pool1'
     description: Storage Pool
     type: string
-  VxFlexOSClusterMode:
+  VxFlexOSClusterConfig:
     default: '3_node'
-    description: Cluster operation model
+    description: Cluster operation config
     type: string
     constraints:
       - allowed_values: [ 3_node ]
@@ -91,9 +91,9 @@ resources:
 
 outputs:
   role_data:
-    description: Role data for the VxFlexOS MDM service.
+    description: Role data for the VxFlexOS base service.
     value:
-      service_name: vxflexos_mdm
+      service_name: vxflexos_base
       upgrade_tasks:
       puppet_config:
         config_image: ''
@@ -102,12 +102,12 @@ outputs:
       docker_config: {}
       workflow_tasks: 
         step2:
-          - name: vxflex_base_ansible_workflow
+          - name: vxflexos_base_ansible_workflow
             workflow: {get_param: VxFlexAnsibleWorkflowName}
       config_settings:
         vxflexos_common_ansible_vars:
           cluster_name: {get_param: VxFlexOSClusterName}
-          cluster_mode: {get_param: VxFlexOSClusterMode}
+          cluster_config: {get_param: VxFlexOSClusterConfig}
           rpms_location: {get_param: VxFlexOSPackageLocation}
           protection_domain: {get_param: VxFlexOSProtectionDomain}
           storage_pool: {get_param: VxFlexOSStoragePool}
@@ -117,4 +117,3 @@ outputs:
           password: {get_param: VxFlexOSPassword}
           lia_token: {get_param: VxFlexOSLiaToken}
           sds_disks: {get_param: VxFlexOSDisks} 
-          
