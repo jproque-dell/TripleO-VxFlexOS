@@ -86,6 +86,10 @@ parameters:
     default: []
     description: List of comma separated values to use as disks for SDS
     type: comma_delimited_list
+  VxFlexOSLicense:
+    default: ''
+    description: Location of the .lic license file to install
+    type: string
 
 resources:
 
@@ -117,3 +121,4 @@ outputs:
           password: {get_param: VxFlexOSPassword}
           lia_token: {get_param: VxFlexOSLiaToken}
           sds_disks: {get_param: VxFlexOSDisks} 
+          license: {get_param: VxFlexOSLicense}

@@ -21,3 +21,5 @@ parameter_defaults:
 
   VxFlexOSPassword: 'Vxflex123!'
   VxFlexOSLiaToken: 'Vxflex123!'
+
+  #VxFlexOSLicense: '/home/osp_admin/123456789.lic'

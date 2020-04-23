@@ -21,3 +21,10 @@
   command: scli --modify_zero_padding_policy --protection_domain_name {{ protection_domain }} --storage_pool_name {{ storage_pool }} --enable_zero_padding
   run_once: true
   delegate_to: "{{ vxflexos_mdm_mgmt_ip }}" 
+
+- name: install the license
+  command: scli --set_license --license_file {{ license }}
+  run_once: true
+  delegate_to: "{{ vxflexos_mdm_mgmt_ip }}"
+  when:
+    - license is defined
