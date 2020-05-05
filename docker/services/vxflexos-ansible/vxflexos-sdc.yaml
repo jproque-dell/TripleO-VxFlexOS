@@ -54,5 +54,8 @@ outputs:
         step_config: ''
       docker_config: {}
       workflow_tasks:  {get_attr: [VxFlexOSBase, role_data, workflow_tasks]}
-      config_settings: {}
+      config_settings:
+        vxflexos_sdc_ansible_vars:
+          map_merge:
+          - {get_attr: [VxFlexOSBase, role_data, config_settings, vxflexos_common_ansible_vars]}
       

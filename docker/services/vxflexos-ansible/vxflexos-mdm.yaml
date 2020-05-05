@@ -55,7 +55,15 @@ outputs:
       docker_config: {}
       workflow_tasks:  {get_attr: [VxFlexOSBase, role_data, workflow_tasks]}
       config_settings: 
-        vxflexos_mdm_ansible_vars:
-          map_merge:
-          - {get_attr: [VxFlexOSBase, role_data, config_settings, vxflexos_common_ansible_vars]}
+        map_merge:
+        - tripleo.vxflexos_mdm.firewall_rules:
+            '200 vxflexos_mdm_listener':
+              dport:
+              - '6611'
+            '201 vxflexos_mdm_cluster':
+              dport:
+              - '9011'
+        - vxflexos_mdm_ansible_vars:
+            map_merge:
+            - {get_attr: [VxFlexOSBase, role_data, config_settings, vxflexos_common_ansible_vars]}
 

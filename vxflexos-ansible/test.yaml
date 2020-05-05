@@ -1,0 +1,9 @@
+--- 
+- hosts: all
+  name: debugging inventory
+  gather_facts: true
+  tasks:
+    - name: print out names of all groups
+      debug: msg="{{ groups }}"
+      
+  
