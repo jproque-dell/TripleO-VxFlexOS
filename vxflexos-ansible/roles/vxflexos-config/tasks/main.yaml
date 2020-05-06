@@ -17,6 +17,13 @@
   delegate_to: "{{ vxflexos_mdm_mgmt_ip }}"
   changed_when: add_sp.rc == 0
 
+- name: modify spare policy based upon SDSs count
+  command: scli --modify_spare_policy --protection_domain_name {{ protection_domain }} --storage_pool_name {{ storage_pool }} --spare_percentage {{ spare_policy_pct }} --i_am_sure
+  run_once: tru
+  delegate_to: "{{ vxflexos_mdm_mgmt_ip }}"
+  when:
+    - sds_count | int < 10
+
 - name: enable zero-padding
   command: scli --modify_zero_padding_policy --protection_domain_name {{ protection_domain }} --storage_pool_name {{ storage_pool }} --enable_zero_padding
   run_once: true
