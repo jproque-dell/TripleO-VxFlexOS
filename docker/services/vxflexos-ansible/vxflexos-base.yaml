@@ -43,9 +43,9 @@ parameters:
         description: >
           The VxFlexOS cluster name must be at leaste 1 character and contains only
           letters and numbers.
-  VxFlexOSPackageLocation:
-    default: '../files/'
-    description: location of VxFlexOS RPMs
+  VxFlexOSRpmsPath:
+    default: '/opt/dellemc/vxflexos/rpms/'
+    description: Path to look for VxFlexOS RPMs
     type: string
   VxFlexOSProtectionDomain:
     default: 'domain1'
@@ -90,6 +90,15 @@ parameters:
     default: ''
     description: Location of the .lic license file to install
     type: string
+  VxFlexOSRpmsMethod:
+    default: 'local'
+    description: Method of getting RPMs to install. Can be either local or external
+    type: string
+    constraints:
+      - allowed_values: [ local, external ]
+        description: > 
+          local if rpms already present in the overcloud image.
+          external if using a remote path where to get RPMs from.
 
 resources:
 
@@ -112,7 +121,7 @@ outputs:
         vxflexos_common_ansible_vars:
           cluster_name: {get_param: VxFlexOSClusterName}
           cluster_config: {get_param: VxFlexOSClusterConfig}
-          rpms_location: {get_param: VxFlexOSPackageLocation}
+          rpms_path: {get_param: VxFlexOSRpmsPath}
           protection_domain: {get_param: VxFlexOSProtectionDomain}
           storage_pool: {get_param: VxFlexOSStoragePool}
           mgmt_interface: {get_param: VxFlexOSMgmtInterface}
@@ -122,3 +131,4 @@ outputs:
           lia_token: {get_param: VxFlexOSLiaToken}
           sds_disks: {get_param: VxFlexOSDisks} 
           license: {get_param: VxFlexOSLicense}
+          rpms_method: {get_param: VxFlexOSRpmsMethod}

@@ -1,5 +1,8 @@
 ---
-- name: Upload package wrapper
-  template: dest="/var/tmp/package_wrapper.sh" src="roles/vxflexos-common/templates/package_wrapper.sh.j2" mode="0775" owner="root" group="root" force="yes"
+- name: Install VxFlexOS SW from local RPMs hosted in the overcloud image
+  include: "install_vxflexos_redhat_local.yaml"
+  when: rpms_method == "local"
 
-- include: "install_vxflexos_redhat.yaml"
+- name: Install VxFlexOS SW from local RPMs hosted on the Directord
+  include: "install_vxflexos_redhat_external.yaml"
+  when: rpms_method == "external"
