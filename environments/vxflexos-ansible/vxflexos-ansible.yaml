@@ -5,7 +5,13 @@ resource_registry:
   OS::TripleO::Services::VxFlexSDC: ../../docker/services/vxflexos-ansible/vxflexos-sdc.yaml
 
 parameter_defaults:
-  VxFleOSPackageLocation: '../files/'
+
+  # Can be either local or external  
+  VxFlexOSRpmsMethod: external
+
+  # Used to override default RPMs path.
+  #VxFlexOSRpmsPath: '/opt/dellemc/vxflexos/rpms'
+
   VxFlexOSClusterName: vxflexos
   VxFlexOSProtectionDomain: domain1
   VxFlexOSStoragePool: pool1

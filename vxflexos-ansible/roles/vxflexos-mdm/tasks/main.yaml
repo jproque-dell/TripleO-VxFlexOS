@@ -8,22 +8,6 @@
   run_once: true
   delegate_to: "{{ vxflexos_mdm_mgmt_ip }}"
 
-#- name: allow traffic on 6611 
-#  iptables:
-#    chain: INPUT
-#    protocol: tcp
-#    destination_port: 6611
-#    jump: ACCEPT
-#    action: insert
-#
-#- name: allow traffic on 9011
-#  iptables:
-#    chain: INPUT
-#    protocol: tcp
-#    destination_port: 9011
-#    jump: ACCEPT
-#    action: insert
-
 - name: add primary MDM with a virtual IP
   command: >
    scli --create_mdm_cluster

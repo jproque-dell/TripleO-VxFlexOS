@@ -21,12 +21,3 @@
   until: add_devices.rc == 0
   delegate_to: "{{ vxflexos_mdm_mgmt_ip }}"
   when: sds_disks > 0
-
-- name: get storage pool details
-  command: scli --query_storage_pool --protection_domain_name {{ protection_domain }} --storage_pool_name {{ storage_pool }}
-  run_once: true
-  register: sp_info
-  delegate_to: "{{ vxflexos_mdm_mgmt_ip }}"
-
-- debug:
-  msg: "{{ sp_info.stdout_lines | regex_search(?:Bytes total capacity) }}"
