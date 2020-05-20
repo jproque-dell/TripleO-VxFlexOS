@@ -63,12 +63,16 @@ parameters:
       - allowed_values: [ 3_node ]
         description: Support for 3 nodes ONLY 
   VxFlexOSMgmtInterface:
-    default: em3  
-    description: Network interface for Mgmt purpose
+    default: vlan170
+    description: Network interface for management
     type: string
   VxFlexOSClusterInterface:
     default: vlan170
-    description: Network interface for clustering 
+    description: Network interface for control plane
+    type: string
+  VxFlexOSDataInterface:
+    default: vlan170
+    description: Network interface for R/W operations
     type: string
   VxFlexOSClusterVirtualIP: 
     default: ''
@@ -126,6 +130,7 @@ outputs:
           storage_pool: {get_param: VxFlexOSStoragePool}
           mgmt_interface: {get_param: VxFlexOSMgmtInterface}
           cluster_interface: {get_param: VxFlexOSClusterInterface}
+          data_interface: {get_param: VxFlexOSDataInterface}
           cluster_vip: {get_param: VxFlexOSClusterVirtualIP}
           password: {get_param: VxFlexOSPassword}
           lia_token: {get_param: VxFlexOSLiaToken}
