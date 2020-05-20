@@ -130,7 +130,7 @@ outputs:
           storage_pool: {get_param: VxFlexOSStoragePool}
           mgmt_interface: {get_param: VxFlexOSMgmtInterface}
           cluster_interface: {get_param: VxFlexOSClusterInterface}
-          data_interface: {get_param: VxFlexOSDataInterface}
+          rebuild_interface: {get_param: VxFlexOSRebuildInterface}
           cluster_vip: {get_param: VxFlexOSClusterVirtualIP}
           password: {get_param: VxFlexOSPassword}
           lia_token: {get_param: VxFlexOSLiaToken}
