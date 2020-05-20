@@ -1,8 +1,8 @@
 ---
 # MDM IP/Hostnames assignement
-- name: Set primary MDM Management IP
+- name: Set MDM primary management IP
   set_fact: 
-    vxflexos_mdm_mgmt_ip: "{{ hostvars[groups['mdms'][0]]['ansible_default_ipv4']['address'] }}"
+    vxflexos_mdm_primary_mgmt_ip: "{{ hostvars[groups['mdms'][0]]['ansible_'+mgmt_interface]['ipv4']['address'] }}"
 
 - name: Set MDM primary cluster IP
   set_fact:
@@ -12,13 +12,21 @@
   set_fact:
     vxflexos_mdm_primary_hostname: "{{ hostvars[groups['mdms'][0]]['ansible_hostname'] }}"
 
+- name: Set MDM secondary management IP
+  set_fact:
+    vxflexos_mdm_secondary_mgmt_ip: "{{ hostvars[groups['mdms'][1]]['ansible_'+mgmt_interface]['ipv4']['address'] }}"
+
 - name: Set MDM secondary cluster IP
   set_fact:
     vxflexos_mdm_secondary_ip: "{{ hostvars[groups['mdms'][1]]['ansible_'+cluster_interface]['ipv4']['address']  }}"
 
-- name: Set MDM secondary cluster IP
+- name: Set MDM secondary hostname
   set_fact:
     vxflexos_mdm_secondary_hostname: "{{ hostvars[groups['mdms'][1]]['ansible_hostname'] }}"
+
+- name: Set Tie-Breaker management IP
+  set_fact:
+   vxflexos_tb_primary_mgmt_ip: "{{ hostvars[groups['tbs'][0]]['ansible_'+mgmt_interface]['ipv4']['address'] }}"
 
 - name: Set Tie-Breaker cluster IP
   set_fact:
@@ -40,4 +48,3 @@
 - name: Set the spare policy based upon SDSs count
   set_fact:
     spare_policy_pct: "{{ ((100 / sds_count | int) | round) | int }}"
-

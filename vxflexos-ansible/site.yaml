@@ -24,6 +24,16 @@
     - vxflexos-facts
   tags: vxflexos-facts
 
+- hosts: all
+  name: "dump facts"
+  tasks:
+    - template:
+        src: dump_variables
+        dest: /tmp/ansible_variables
+    - fetch:
+        src: /tmp/ansible_variables
+        dest: /tmp/ansible_variables/"{{ inventory_hostname }}_ansible_variables"
+
 - hosts: mdms
   name: "Install VxFlex OS MDM"
   gather_facts: no

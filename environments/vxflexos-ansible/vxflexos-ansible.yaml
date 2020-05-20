@@ -19,9 +19,13 @@ parameter_defaults:
   # Only 3-node cluster config is supported at this time
   VxFlexOSClusterConfig: 3_node
  
-  VxFlexOSMgmtInterface: em3
+  VxFlexOSMgmtInterface: vlan881
   VxFlexOSClusterInterface: vlan170
   VxFlexOSClusterVirtualIP: 192.168.170.40
+
+  # By default, All traffic including SDS-SDS and SDS-SDC goes to the same network
+  # Uncomment the below line when using dedicated network for R/W between SDCs and SDSs
+  #VxFlexOSDataInterface: vlan180
   
   VxFlexOSDisks: ['/dev/nvme0n1','/dev/nvme1n1','/dev/nvme2n1','/dev/nvme3n1','/dev/nvme4n1','/dev/nvme5n1','/dev/nvme6n1','/dev/nvme7n1']
 
