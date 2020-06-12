@@ -35,7 +35,7 @@ parameter_defaults:
   
   VxFlexOSDisks: ['/dev/nvme0n1','/dev/nvme1n1','/dev/nvme2n1','/dev/nvme3n1','/dev/nvme4n1','/dev/nvme5n1','/dev/nvme6n1','/dev/nvme7n1']
 
-  VxFlexOSPassword: 'Vxflex123!'
-  VxFlexOSLiaToken: 'Vxflex123!'
+  VxFlexOSPassword: 'Vxflex123'
+  VxFlexOSLiaToken: 'Vxflex123'
 
-  #VxFlexOSLicense: '/home/osp_admin/123456789.lic'
+  #VxFlexOSLicense: '/opt/dellemc/vxflexos/01da2d7a6a728740_SIO_4715942_21-May-2020_exp.lic'

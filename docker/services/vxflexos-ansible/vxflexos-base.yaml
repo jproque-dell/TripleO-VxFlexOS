@@ -70,9 +70,9 @@ parameters:
     default: vlan170
     description: Network interface for control plane
     type: string
-  VxFlexOSDataInterface:
+  VxFlexOSRebuildInterface:
     default: vlan170
-    description: Network interface for R/W operations
+    description: Network interface for rebuild/rebalance operations
     type: string
   VxFlexOSClusterVirtualIP: 
     default: ''

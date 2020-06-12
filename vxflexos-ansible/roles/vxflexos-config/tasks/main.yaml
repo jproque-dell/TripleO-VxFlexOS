@@ -28,10 +28,16 @@
   command: scli --modify_zero_padding_policy --protection_domain_name {{ protection_domain }} --storage_pool_name {{ storage_pool }} --enable_zero_padding
   run_once: true
   delegate_to: "{{ vxflexos_mdm_primary_mgmt_ip }}" 
-
-- name: install the license
-  command: scli --set_license --license_file {{ license }}
-  run_once: true
-  delegate_to: "{{ vxflexos_mdm_primary_mgmt_ip }}"
+ 
+- name: copy and install license
+  block:
+    - name: copy the license file
+      copy: src="{{ license }}" dest="/var/tmp" mode="0644"
+      register: license_file
+    
+    - name: install the license
+      command: scli --set_license --license_file {{ license_file.dest }}
+      run_once: true
+      delegate_to: "{{ vxflexos_mdm_primary_mgmt_ip }}"
   when:
     - license | length > 0
